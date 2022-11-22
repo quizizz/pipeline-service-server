@@ -1,0 +1,54 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 12
+    commands:
+      - n 16
+      - echo "Nothing to install here"
+
+  pre_build:
+    commands:
+      - echo "Logging into ecr"
+      - $(aws ecr get-login --no-include-email --region us-east-1)
+      - ts=$(date +%s)
+      - echo "ComponentName = ${componentName} | ComponentType = ${componentType} | Repository = ${image_repository}"
+      - CURRENT_IMAGE="${image_repository}/${env}/${componentType}:${componentName}_${version}_${ts}"
+      - echo "Current Image => ${CURRENT_IMAGE}"
+      - LATEST_IMAGE=${image_repository}/${env}/${componentType}:${componentName}_V2LATEST
+      - echo "Latest Image => ${LATEST_IMAGE}"
+      - docker pull $LATEST_IMAGE || true
+  build:
+    commands:
+      - echo "Building docker image"
+      - |
+        docker build \
+          --cache-from=$LATEST_IMAGE \
+          -t $CURRENT_IMAGE \
+          -f Dockerfile \
+          . \
+          --build-arg env=$env \
+          --build-arg kind=$kind \
+          --build-arg appType=$appType \
+          --build-arg componentType=${componentType} \
+          --build-arg version=$version \
+          --build-arg apiver=$componentName \
+          --build-arg commitId=$commitId \
+          --build-arg sentryDSN=$SENTRY_DSN \
+          --build-arg sentryAuthToken=$SENTRY_AUTH_TOKEN \
+          --build-arg sentryGitRepo=$SENTRY_GIT_REPO
+      - docker tag $CURRENT_IMAGE $LATEST_IMAGE
+  post_build:
+    commands:
+      - echo "Associating commits on Sentry"
+      - bash scripts/attachCommitsOnSentry.sh
+      - echo "Pushing on ECR"
+      - |
+        docker push $CURRENT_IMAGE \
+          && docker push $LATEST_IMAGE
+      - echo "Writing json"
+      - echo "{\"image\":\"$CURRENT_IMAGE\"}" > $version.json
+      - cat $version.json
+      - echo "Uploading"
+      - aws s3 cp $version.json s3://quizizz-builds/versions/${componentType}/${env}/$version.json

@@ -1,0 +1,12 @@
+{
+	"watch": [
+		"src/*"
+	],
+	"ignore": [
+		"*.test.js",
+		"dist/*"
+	],
+	"verbose": true,
+	"delay": 1000,
+	"exec": "npm run compile && node --enable-source-maps dist/main.js"
+}

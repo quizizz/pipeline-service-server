@@ -1,0 +1,62 @@
+name: Unit Tests
+on:
+  push:
+    branches:
+      - prod 
+      - main
+      - master 
+  pull_request:
+    branches:
+      - prod
+      - main
+      - master
+
+  workflow_dispatch:
+    
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check Cache for Dependencies
+        uses: actions/cache@v2
+        with:
+          path: node_modules
+          key: ${{ hashFiles('package-lock.json') }}
+
+      - name: Install dependencies
+        run: npm i
+      
+      - name: Run Tests
+        run: npm run test:unit:ci
+
+      - name: Create test result artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: unit-test-results
+          path: |
+            tests/results
+            tests/reports
+          retention-days: 1
+          
+
+      - name: Generate Test Coverage Report
+        uses: ArtiomTr/jest-coverage-report-action@v2.0-rc.6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          threshold: 1
+          coverage-file: tests/reports/test-report.json
+          base-coverage-file: tests/reports/test-report.json
+          skip-step: 'all'
+          annotations: 'none'
+          test-script: npx jest tests/unit --silent --ci --coverage --coverageReporters="text" --coverageReporters="text-summary"
+
+      - name: Generate Test Report
+        uses: Anirudh-Quizizz/test-reporter@main
+        if: success() || failure()
+        with:
+          name: Test Results
+          path: tests/results/*.xml
+          reporter: jest-junit
+          owner: quizizz

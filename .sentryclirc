@@ -1,0 +1,4 @@
+[defaults]
+project=<Name>
+org=quizizz
+vcs_remote=github 
