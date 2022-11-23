@@ -34,16 +34,3 @@ export class HealthController implements BaseController {
     };
   }
 }
-
-@injectable()
-export class ExampleKafkaController implements BaseController {
-  name: 'ExampleKafkaController';
-
-  async exec(req) {
-    logger.debugj(req);
-
-    throw new NotFoundError('kafka missing', {
-      missing: 'yes',
-    });
-  }
-}

@@ -10,19 +10,14 @@ import { ControllerFactory } from '@app/controllers/factory.controller';
 import { HttpRoutes } from '@app/routes/http';
 import { ErrorHandler, ErrorHandlerSentry } from '@app/errors/error-handler';
 import Config from '@app/config';
-import { KafkaRoutes } from '@app/routes/kafka';
 import KafkaResource from '@app/bootstrap/resources/kafka-resource';
 import ExampleResource from '@app/bootstrap/resources/example-resource';
 import { ProcessEnv } from '@app/core/process.env';
 import Emitter from '@app/core/emitter';
 import { MetaController } from '@app/controllers';
 import { NotFoundController } from '@app/controllers/404.controller';
-import {
-  ExampleKafkaController,
-  HealthController,
-} from '@app/controllers/meta.controller';
+import { HealthController } from '@app/controllers/meta.controller';
 import ContextStorageService from '@app/services/context-storage.service';
-import KafkaWorker from '@app/apps/kafka.app';
 
 /**
  * Inits DI container
@@ -58,19 +53,10 @@ function createDependencyContainer() {
   container
     .bind<interfaces.Factory<HttpServer>>(BeanTypes.HTTP_FACTORY)
     .toAutoFactory<HttpServer>(BeanTypes.HTTP_SERVER);
-  container.bind<KafkaWorker>(BeanTypes.KAFKA_WORKER).to(KafkaWorker);
-  container
-    .bind<interfaces.Factory<KafkaWorker>>(BeanTypes.KAFKA_FACTORY)
-    .toAutoFactory<KafkaWorker>(BeanTypes.KAFKA_WORKER);
-
   /** -------------------------------- Routes -------------------------------- */
   container
     .bind<HttpRoutes>(BeanTypes.HTTP_ROUTES)
     .to(HttpRoutes)
-    .inSingletonScope();
-  container
-    .bind<KafkaRoutes>(BeanTypes.KAFKA_ROUTES)
-    .to(KafkaRoutes)
     .inSingletonScope();
 
   /** -------------------------------- Resources  -------------------------------- */
@@ -94,11 +80,6 @@ function createDependencyContainer() {
   container
     .bind<MetaController>(BeanTypes.META_CONTROLLER)
     .to(MetaController)
-    .inSingletonScope();
-
-  container
-    .bind<ExampleKafkaController>(BeanTypes.EXAMPLE_KAFKA_CONTROLLER)
-    .to(ExampleKafkaController)
     .inSingletonScope();
 
   container

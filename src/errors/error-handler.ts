@@ -28,11 +28,6 @@ export interface ErrorHandler {
     res?: ExpressResponse,
     ctx?: Context,
   ): Promise<void>;
-  handleKafkaError(
-    ex: BaseError | Error,
-    req?: Request<any, any, any>,
-    topic?: string,
-  ): Promise<void>;
 }
 
 interface ErrorHandlerOpts {
@@ -164,26 +159,6 @@ export class ErrorHandlerSentry implements ErrorHandler {
         method: req?.method,
       } as Record<string, any>,
       details: (ex as BaseError)?.details,
-    });
-  }
-
-  async handleKafkaError(
-    ex: BaseError | Error,
-    req?: Request<any, any, any>,
-    topic?: string,
-  ) {
-    await this.handle(ex, {
-      request: {
-        body: req?.body,
-        data: {
-          topic,
-          body: req?.body,
-        },
-      } as Record<string, any>,
-      topic,
-      details: (ex as BaseError)?.details,
-      method: 'KAFKA',
-      route: topic,
     });
   }
 

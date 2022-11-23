@@ -1,7 +1,6 @@
 import ServiceLocator from '@app/core/service-locator';
 import BaseController from '@app/controllers/base.controller';
 import HttpController from '@app/controllers/http.controller';
-import KafkaController from '@app/controllers/kafka.controller';
 import { injectable, inject } from 'inversify';
 import beans from '@app/core/beans';
 import { ErrorHandler } from '@app/errors/error-handler';
@@ -24,14 +23,5 @@ export class ControllerFactory {
       this.contextStorage,
     );
     return httpController.exec.bind(httpController);
-  }
-
-  createKafkaController(controller: BaseController) {
-    const kafkaController = new KafkaController(
-      controller,
-      this.errorHandler,
-      this.contextStorage,
-    );
-    return kafkaController.exec.bind(kafkaController);
   }
 }
