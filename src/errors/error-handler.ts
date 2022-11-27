@@ -121,12 +121,12 @@ export class ErrorHandlerSentry implements ErrorHandler {
 
     const formattedError = this.genMsg(ex as BaseError, opts);
 
-    if (this.config.env === 'prod') {
-      this.kafka.getProducer().produce({
-        topic: `errors.${this.processEnv.componentType}`,
-        message: formattedError,
-      });
-    }
+    // if (this.config.env === 'prod') {
+    //   this.kafka.getProducer().produce({
+    //     topic: `errors.${this.processEnv.componentType}`,
+    //     message: formattedError,
+    //   });
+    // }
 
     // @ts-expect-error We're wrapping the Error class if an unhandled error is found
     if (ex.parsedStack) {

@@ -18,12 +18,25 @@ export default {
   // resources
   EXAMPLE: Symbol.for('example'),
   KAFKA: Symbol.for('kafka_resource'),
+  CASSANDRA: Symbol.for('cassandra'),
+  TEMPORAL: Symbol.for('temporal'),
 
   // controllers
   META_CONTROLLER: Symbol.for('meta_controller'),
   HEALTH_CONTROLLER: Symbol.for('health_controller'),
   NOT_FOUND_CONTROLLER: Symbol.for('not_found_controller'),
+  API_CONTROLLER: Symbol.for('api_controller'),
+  PIPELINE_CONTROLLER: Symbol.for('pipeline_controller'),
+  STEP_CONTROLLER: Symbol.for('step_controller'),
 
   // services
   CONTEXT_STORAGE_SERVICE: Symbol.for('context_storage_service'),
+  API_SERVICE: Symbol.for('api_service'),
+  PIPELINE_SERVICE: Symbol.for('pipeline_service'),
+  STEP_SERVICE: Symbol.for('step_service'),
+
+  // repositories
+  API_REPOSITORY: Symbol.for('api_repository'),
+  PIPELINE_REPOSITORY: Symbol.for('pipeline_repository'),
+  STEP_REPOSITORY: Symbol.for('step_repository'),
 };

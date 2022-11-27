@@ -18,6 +18,8 @@ import { MetaController } from '@app/controllers';
 import { NotFoundController } from '@app/controllers/404.controller';
 import { HealthController } from '@app/controllers/meta.controller';
 import ContextStorageService from '@app/services/context-storage.service';
+import CassandraResource from '@app/bootstrap/resources/cassandra-resource';
+import TemporalResource from '@app/bootstrap/resources/temporal-resource';
 
 /**
  * Inits DI container
@@ -64,6 +66,14 @@ function createDependencyContainer() {
   container
     .bind<KafkaResource>(BeanTypes.KAFKA)
     .to(KafkaResource)
+    .inSingletonScope();
+  container
+    .bind<CassandraResource>(BeanTypes.CASSANDRA)
+    .to(CassandraResource)
+    .inSingletonScope();
+  container
+    .bind<TemporalResource>(BeanTypes.TEMPORAL)
+    .to(TemporalResource)
     .inSingletonScope();
   container
     .bind<ExampleResource>(BeanTypes.EXAMPLE)

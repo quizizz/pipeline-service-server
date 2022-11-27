@@ -18,6 +18,8 @@ import { ErrorHandler } from '@app/errors/error-handler';
 import { ErrorMessageGenerator } from '@app/controllers/helpers';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import TemporalResource from '@app/bootstrap/resources/temporal-resource';
+import CassandraResource from '@app/bootstrap/resources/cassandra-resource';
 
 @injectable()
 export default class HttpServer {
@@ -32,7 +34,8 @@ export default class HttpServer {
     @inject(beans.ERROR_HANDLER) private errorHandler: ErrorHandler,
 
     // Resources
-    @inject(beans.EXAMPLE) private exampleResource: ExampleResource,
+    @inject(beans.TEMPORAL) private temporalResource: TemporalResource,
+    @inject(beans.CASSANDRA) private cassandraResource: CassandraResource,
     @inject(beans.KAFKA) private kafkaResource: KafkaResource,
   ) {
     this.app = express();
@@ -40,7 +43,8 @@ export default class HttpServer {
 
   async boot() {
     await this.bootstrap
-      .withResource(this.exampleResource)
+      .withResource(this.temporalResource)
+      .withResource(this.cassandraResource)
       .withResource(this.kafkaResource)
       .load();
 

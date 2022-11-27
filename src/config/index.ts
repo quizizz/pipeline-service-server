@@ -50,6 +50,28 @@ export default class Config {
       '34.234.67.78:9092',
     ]),
   };
+  cassandra: {
+    clientOptions: {
+      contactPoints: string[];
+      keyspace: string;
+      localDataCenter: string;
+    };
+    clientName?: string;
+  } = json({
+    clientOptions: {
+      contactPoints: ['127.0.0.1'],
+      keyspace: 'org',
+      localDataCenter: 'local',
+    },
+    clientName: 'organization-service',
+  });
+  pipelineServiceConfig: {
+    otel_collection_url?: string;
+    statsd_collection_url?: string;
+    temporal_frontend_address: string;
+  } = json({
+    temporal_frontend_address: '0.0.0.0:7233',
+  });
 
   constructor(@inject(beans.ENV) private processEnv: ProcessEnv) {
     this.env = string(processEnv.env);
