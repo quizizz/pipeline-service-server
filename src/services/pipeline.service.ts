@@ -12,6 +12,7 @@ export interface IPipelineService {
   getPipeline(args: {
     pipelineName: string;
     pipelineVersion: string;
+    pipelineNamespace: string;
   }): Promise<Result<PipelineSchema | null>>;
   startPipeline(args: {
     pipelineName: string;
@@ -35,12 +36,15 @@ export class PipelineService implements IPipelineService {
     pipelineName: string;
     pipelineVersion: string;
     startedBy: string;
+    pipelineNamespace: string;
   }): Promise<Result<PipelineExecutionSchema>> {
-    const { pipelineName, pipelineVersion, startedBy } = args;
+    const { pipelineName, pipelineVersion, startedBy, pipelineNamespace } =
+      args;
 
     const exists = await this.pipelineRepository.checkIfPipelineExists({
       name: pipelineName,
       version: pipelineVersion,
+      namespace: pipelineNamespace,
     });
     if (exists) {
       throw new BaseError(
@@ -58,6 +62,7 @@ export class PipelineService implements IPipelineService {
       name: pipelineName,
       version: pipelineVersion,
       startedBy: startedBy,
+      namespace: pipelineNamespace,
     });
 
     return result;
@@ -101,6 +106,7 @@ export class PipelineService implements IPipelineService {
     const exists = await this.pipelineRepository.checkIfPipelineExists({
       name: pipelineSchema.name,
       version: pipelineSchema.version,
+      namespace: pipelineSchema.namespace,
     });
     if (exists) {
       throw new BaseError(
@@ -122,12 +128,14 @@ export class PipelineService implements IPipelineService {
   async getPipeline(args: {
     pipelineName: string;
     pipelineVersion: string;
+    pipelineNamespace: string;
   }): Promise<Result<PipelineSchema>> {
-    const { pipelineName, pipelineVersion } = args;
+    const { pipelineName, pipelineVersion, pipelineNamespace } = args;
 
     const exists = await this.pipelineRepository.checkIfPipelineExists({
       name: pipelineName,
       version: pipelineVersion,
+      namespace: pipelineNamespace,
     });
     if (!exists) {
       throw new BaseError(
@@ -137,6 +145,7 @@ export class PipelineService implements IPipelineService {
         {
           pipelineName: pipelineName,
           pipelineVersion: pipelineVersion,
+          pipelineNamespace: pipelineNamespace,
         },
       );
     }

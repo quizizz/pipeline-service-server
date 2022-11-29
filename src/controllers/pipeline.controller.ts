@@ -56,17 +56,27 @@ export class PipelineController {
   createGetPipelineController(): BaseController {
     return {
       name: 'createGetPipelineController',
-      validate: ({ body }: { body: { name: string; version: string } }) => {
+      validate: ({
+        body,
+      }: {
+        body: { name: string; version: string; namespace: string };
+      }) => {
         const validationSchema = Joi.object({
           name: Joi.string().required(),
           version: Joi.string().required(),
+          namespace: Joi.string().required(),
         });
         return joiValidationResult(validationSchema, body);
       },
-      exec: async ({ body }: { body: { name: string; version: string } }) => {
+      exec: async ({
+        body,
+      }: {
+        body: { name: string; version: string; namespace: string };
+      }) => {
         const result = await this.pipelineService.getPipeline({
           pipelineName: body.name,
           pipelineVersion: body.version,
+          pipelineNamespace: body.namespace,
         });
 
         return {

@@ -24,10 +24,10 @@ export class ApiController {
           url: Joi.string().required(),
           owner: Joi.object({
             email: Joi.string().required(),
-          }).requried(),
+          }).required(),
           retry: Joi.object({
-            count: Joi.number.required(),
-            delay: Joi.number.required(),
+            count: Joi.number().required(),
+            delay: Joi.number().required(),
           }),
         });
         return joiValidationResult(validationSchema, body);

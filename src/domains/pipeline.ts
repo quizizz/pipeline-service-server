@@ -38,6 +38,7 @@ export type PipelineExecutionSchema = {
     }
   >;
   startedBy: string;
+  pipelineNamespace: string;
   pipelineName: string;
   pipelineVersion: string;
   status: string;

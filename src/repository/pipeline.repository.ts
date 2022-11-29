@@ -13,6 +13,7 @@ export interface IPipelineRepository {
   checkIfPipelineExists(args: {
     name: string;
     version: string;
+    namespace: string;
   }): Promise<Result<boolean>>;
   checkIfPipelineExecutionExists(args: {
     pipelineExecutionId: string;
@@ -21,6 +22,7 @@ export interface IPipelineRepository {
     name: string;
     version: string;
     startedBy: string;
+    namespace: string;
   }): Promise<Result<PipelineExecutionSchema>>;
   stopPipelineExecution(args: {
     pipelineExecutionId: string;
@@ -41,6 +43,7 @@ export class PipelineRepository implements IPipelineRepository {
   async startPipeline(args: {
     name: string;
     version: string;
+    namespace: string;
     startedBy: string;
   }): Promise<Result<PipelineExecutionSchema>> {
     throw new Error('Method not implemented.');

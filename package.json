@@ -34,7 +34,6 @@
   "dependencies": {
     "@aws-sdk/client-ssm": "^3.44.0",
     "@aws-sdk/client-sts": "^3.43.0",
-    "@quizizz/kafka": "github:quizizz/kafka-wrapper#v1.0.0",
     "@quizizz/service-communication": "github:quizizz/service-communication-wrapper#v0.0.11",
     "@quizizz/stacktrace-utils": "github:quizizz/stacktrace-utils#v0.1.5",
     "@types/module-alias": "^2.0.1",
@@ -45,6 +44,7 @@
     "cookie-parser": "^1.4.6",
     "express": "^4.17.1",
     "inversify": "^6.0.1",
+    "joi": "^17.7.0",
     "json-stringify-safe": "^5.0.1",
     "mapofenv": "^0.0.10",
     "module-alias": "^2.2.2",
