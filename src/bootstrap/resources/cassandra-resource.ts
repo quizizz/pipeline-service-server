@@ -4,7 +4,6 @@ import beans from '@app/core/beans';
 import { injectable, inject } from 'inversify';
 import Emitter from '@app/core/emitter';
 import { Client as CassandraClient } from '@quizizz/cassandra';
-
 export interface ICassandraResource extends Resource {
   load(): Promise<void>;
   executeQuery(
@@ -26,6 +25,8 @@ export default class CassandraResource implements ICassandraResource {
     const { clientName = 'pipeline-server-service', clientOptions } =
       this.config.cassandra;
 
+    clientOptions.keyspace = 'pipeline';
+
     this._client = new CassandraClient(
       clientName,
       this.emitter.getEmitter(),
@@ -41,7 +42,7 @@ export default class CassandraResource implements ICassandraResource {
     query: string,
     params: Array<any>,
     queryOptions?: object,
-  ): Promise<unknown> {
+  ): Promise<any> {
     const result = await this._client.execute(query, params, queryOptions);
     return result;
   }

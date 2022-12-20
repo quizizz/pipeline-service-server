@@ -9,7 +9,7 @@ export interface IStepService {
   createStep(args: { stepSchema: StepSchema }): Promise<Result<StepSchema>>;
   getStep(args: {
     stepName: string;
-    stepVersion: string;
+    stepVersion: number;
   }): Promise<Result<StepSchema | null>>;
 }
 
@@ -48,7 +48,7 @@ export class StepService implements IStepService {
 
   async getStep(args: {
     stepName: string;
-    stepVersion: string;
+    stepVersion: number;
   }): Promise<Result<StepSchema>> {
     const { stepName, stepVersion } = args;
 

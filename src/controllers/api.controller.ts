@@ -12,22 +12,20 @@ export class ApiController {
     private apiService: IApiService,
   ) {}
 
-  createAPIController(): BaseController {
+  createCreateAPIController(): BaseController {
     return {
-      name: 'createAPIController',
+      name: 'createCreateAPIController',
       validate: ({ body }: { body: ApiSchema }) => {
         const validationSchema = Joi.object({
           schemaDefinitionVersion: Joi.string().required(),
           name: Joi.string().required(),
-          type: Joi.string().required(),
-          method: Joi.string().required(),
-          url: Joi.string().required(),
-          owner: Joi.object({
-            email: Joi.string().required(),
-          }).required(),
-          retry: Joi.object({
-            count: Joi.number().required(),
-            delay: Joi.number().required(),
+          version: Joi.number().required(),
+          data: Joi.object({
+            type: Joi.string().required(),
+            functionName: Joi.string().required(),
+            owner: Joi.object({
+              service: Joi.string().required(),
+            }).required(),
           }),
         });
         return joiValidationResult(validationSchema, body);
@@ -36,7 +34,7 @@ export class ApiController {
         const result = await this.apiService.createApi({ apiSchema: body });
 
         return {
-          data: result,
+          data: result.ok(),
         };
       },
     };
@@ -45,15 +43,21 @@ export class ApiController {
   createGetAPIController(): BaseController {
     return {
       name: 'createGetAPIController',
-      validate: ({ body }: { body: { name: string } }) => {
+      validate: ({ params }: { params: { name: string; version: number } }) => {
         const validationSchema = Joi.object({
           name: Joi.string().required(),
+          version: Joi.number().required(),
         });
-        return joiValidationResult(validationSchema, body);
+        return joiValidationResult(validationSchema, params);
       },
-      exec: async ({ body }: { body: { name: string } }) => {
+      exec: async ({
+        params,
+      }: {
+        params: { name: string; version: number };
+      }) => {
         const result = await this.apiService.getApi({
-          apiName: body.name,
+          apiName: params.name,
+          apiVersion: params.version,
         });
 
         return {

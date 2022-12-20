@@ -60,10 +60,10 @@ export default class Config {
   } = json({
     clientOptions: {
       contactPoints: ['127.0.0.1'],
-      keyspace: 'org',
+      keyspace: 'pipeline',
       localDataCenter: 'local',
     },
-    clientName: 'organization-service',
+    clientName: 'pipeline-server-service',
   });
   pipelineServiceConfig: {
     otel_collection_url?: string;

@@ -20,6 +20,15 @@ import { HealthController } from '@app/controllers/meta.controller';
 import ContextStorageService from '@app/services/context-storage.service';
 import CassandraResource from '@app/bootstrap/resources/cassandra-resource';
 import TemporalResource from '@app/bootstrap/resources/temporal-resource';
+import { ApiController } from '@app/controllers/api.controller';
+import { StepController } from '@app/controllers/step.controller';
+import { PipelineController } from '@app/controllers/pipeline.controller';
+import { ApiService } from '@app/services/api.service';
+import { PipelineService } from '@app/services/pipeline.service';
+import { StepService } from '@app/services/step.service';
+import { StepRepository } from '@app/repository/step.repository';
+import { PipelineRepository } from '@app/repository/pipeline.repository';
+import { ApiRepository } from '@app/repository/api.repository';
 
 /**
  * Inits DI container
@@ -102,10 +111,56 @@ function createDependencyContainer() {
     .to(NotFoundController)
     .inSingletonScope();
 
+  container
+    .bind<ApiController>(BeanTypes.API_CONTROLLER)
+    .to(ApiController)
+    .inSingletonScope();
+
+  container
+    .bind<StepController>(BeanTypes.STEP_CONTROLLER)
+    .to(StepController)
+    .inSingletonScope();
+
+  container
+    .bind<PipelineController>(BeanTypes.PIPELINE_CONTROLLER)
+    .to(PipelineController)
+    .inSingletonScope();
+
   /** -------------------------------- Services -------------------------------- */
   container
     .bind<ContextStorageService>(BeanTypes.CONTEXT_STORAGE_SERVICE)
     .to(ContextStorageService)
+    .inSingletonScope();
+
+  container
+    .bind<ApiService>(BeanTypes.API_SERVICE)
+    .to(ApiService)
+    .inSingletonScope();
+
+  container
+    .bind<PipelineService>(BeanTypes.PIPELINE_SERVICE)
+    .to(PipelineService)
+    .inSingletonScope();
+
+  container
+    .bind<StepService>(BeanTypes.STEP_SERVICE)
+    .to(StepService)
+    .inSingletonScope();
+
+  /** -------------------------------- Repositories -------------------------------- */
+  container
+    .bind<StepRepository>(BeanTypes.STEP_REPOSITORY)
+    .to(StepRepository)
+    .inSingletonScope();
+
+  container
+    .bind<PipelineRepository>(BeanTypes.PIPELINE_REPOSITORY)
+    .to(PipelineRepository)
+    .inSingletonScope();
+
+  container
+    .bind<ApiRepository>(BeanTypes.API_REPOSITORY)
+    .to(ApiRepository)
     .inSingletonScope();
 
   /** -------------------------------- Main app -------------------------------- */

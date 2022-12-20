@@ -18,7 +18,7 @@ export class PipelineController {
       validate: ({ body }: { body: PipelineSchema }) => {
         const validationSchema = Joi.object({
           namespace: Joi.string().required(),
-          schemaVersion: Joi.string().required(),
+          schemaDefinitionVersion: Joi.string().required(),
           name: Joi.string().required(),
           version: Joi.string().required(),
           resources: Joi.array().items(
@@ -63,7 +63,7 @@ export class PipelineController {
       }) => {
         const validationSchema = Joi.object({
           name: Joi.string().required(),
-          version: Joi.string().required(),
+          version: Joi.number().required(),
           namespace: Joi.string().required(),
         });
         return joiValidationResult(validationSchema, body);
@@ -71,7 +71,7 @@ export class PipelineController {
       exec: async ({
         body,
       }: {
-        body: { name: string; version: string; namespace: string };
+        body: { name: string; version: number; namespace: string };
       }) => {
         const result = await this.pipelineService.getPipeline({
           pipelineName: body.name,
@@ -92,7 +92,7 @@ export class PipelineController {
       validate: ({
         body,
       }: {
-        body: { name: string; version: string; startedBy: string };
+        body: { name: string; version: number; startedBy: string };
       }) => {
         const validationSchema = Joi.object({
           name: Joi.string().required(),
@@ -104,7 +104,7 @@ export class PipelineController {
       exec: async ({
         body,
       }: {
-        body: { name: string; version: string; startedBy: string };
+        body: { name: string; version: number; startedBy: string };
       }) => {
         const result = await this.pipelineService.startPipeline({
           pipelineName: body.name,

@@ -6,8 +6,11 @@ import { inject, injectable } from 'inversify';
 
 export interface IStepRepository {
   createOne(args: StepSchema): Promise<Result<StepSchema>>;
-  getStep(args: { name: string; version: string }): Promise<Result<StepSchema>>;
-  checkIfPipelineExists(args: { name: string; version: string }): Promise<boolean>;
+  getStep(args: { name: string; version: number }): Promise<Result<StepSchema>>;
+  checkIfPipelineExists(args: {
+    name: string;
+    version: number;
+  }): Promise<boolean>;
 }
 
 @injectable()
@@ -20,12 +23,15 @@ export class StepRepository implements IStepRepository {
 
   async getStep(args: {
     name: string;
-    version: string;
+    version: number;
   }): Promise<Result<StepSchema>> {
     throw new Error('Method not implemented.');
   }
 
-  async checkIfPipelineExists(args: { name: string; version: string; }): Promise<boolean> {
+  async checkIfPipelineExists(args: {
+    name: string;
+    version: number;
+  }): Promise<boolean> {
     throw new Error('Method not implemented.');
   }
 }

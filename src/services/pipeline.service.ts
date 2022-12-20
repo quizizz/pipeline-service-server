@@ -11,12 +11,12 @@ export interface IPipelineService {
   }): Promise<Result<PipelineSchema>>;
   getPipeline(args: {
     pipelineName: string;
-    pipelineVersion: string;
+    pipelineVersion: number;
     pipelineNamespace: string;
   }): Promise<Result<PipelineSchema | null>>;
   startPipeline(args: {
     pipelineName: string;
-    pipelineVersion: string;
+    pipelineVersion: number;
     startedBy: string;
   }): Promise<Result<PipelineExecutionSchema | null>>;
   stopPipeline(args: {
@@ -34,7 +34,7 @@ export class PipelineService implements IPipelineService {
 
   async startPipeline(args: {
     pipelineName: string;
-    pipelineVersion: string;
+    pipelineVersion: number;
     startedBy: string;
     pipelineNamespace: string;
   }): Promise<Result<PipelineExecutionSchema>> {
@@ -127,7 +127,7 @@ export class PipelineService implements IPipelineService {
 
   async getPipeline(args: {
     pipelineName: string;
-    pipelineVersion: string;
+    pipelineVersion: number;
     pipelineNamespace: string;
   }): Promise<Result<PipelineSchema>> {
     const { pipelineName, pipelineVersion, pipelineNamespace } = args;

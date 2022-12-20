@@ -7,7 +7,10 @@ import { inject, injectable } from 'inversify';
 
 export interface IApiService {
   createApi(args: { apiSchema: ApiSchema }): Promise<Result<ApiSchema>>;
-  getApi(args: { apiName: string }): Promise<Result<ApiSchema | null>>;
+  getApi(args: {
+    apiName: string;
+    apiVersion: number;
+  }): Promise<Result<ApiSchema | null>>;
 }
 
 @injectable()
@@ -22,6 +25,7 @@ export class ApiService implements IApiService {
 
     const exists = await this.apiRepository.checkIfExists({
       name: apiSchema.name,
+      version: apiSchema.version,
     });
     if (exists) {
       throw new BaseError(
@@ -34,16 +38,25 @@ export class ApiService implements IApiService {
       );
     }
 
+    const currentTimestamp = Date.now();
+    apiSchema.createdAt = currentTimestamp;
+
+    console.log('temp', apiSchema);
+
     const result = await this.apiRepository.createOne(apiSchema);
 
     return result;
   }
 
-  async getApi(args: { apiName: string }): Promise<Result<ApiSchema>> {
-    const { apiName } = args;
+  async getApi(args: {
+    apiName: string;
+    apiVersion: number;
+  }): Promise<Result<ApiSchema>> {
+    const { apiName, apiVersion } = args;
 
     const exists = await this.apiRepository.checkIfExists({
       name: apiName,
+      version: apiVersion,
     });
     if (!exists) {
       throw new BaseError(
@@ -58,6 +71,7 @@ export class ApiService implements IApiService {
 
     const result = await this.apiRepository.getApi({
       name: apiName,
+      version: apiVersion,
     });
 
     return result;

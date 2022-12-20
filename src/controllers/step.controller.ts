@@ -50,11 +50,11 @@ export class StepController {
       validate: ({ body }: { body: { name: string; version: string } }) => {
         const validationSchema = Joi.object({
           name: Joi.string().required(),
-          version: Joi.string().required(),
+          version: Joi.number().required(),
         });
         return joiValidationResult(validationSchema, body);
       },
-      exec: async ({ body }: { body: { name: string; version: string } }) => {
+      exec: async ({ body }: { body: { name: string; version: number } }) => {
         const result = await this.stepService.getStep({
           stepName: body.name,
           stepVersion: body.version,

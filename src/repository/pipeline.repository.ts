@@ -8,11 +8,11 @@ export interface IPipelineRepository {
   createOne(args: PipelineSchema): Promise<Result<PipelineSchema>>;
   getPipeline(args: {
     name: string;
-    version: string;
+    version: number;
   }): Promise<Result<PipelineSchema>>;
   checkIfPipelineExists(args: {
     name: string;
-    version: string;
+    version: number;
     namespace: string;
   }): Promise<Result<boolean>>;
   checkIfPipelineExecutionExists(args: {
@@ -20,7 +20,7 @@ export interface IPipelineRepository {
   }): Promise<Result<boolean>>;
   startPipeline(args: {
     name: string;
-    version: string;
+    version: number;
     startedBy: string;
     namespace: string;
   }): Promise<Result<PipelineExecutionSchema>>;
@@ -42,7 +42,7 @@ export class PipelineRepository implements IPipelineRepository {
 
   async startPipeline(args: {
     name: string;
-    version: string;
+    version: number;
     namespace: string;
     startedBy: string;
   }): Promise<Result<PipelineExecutionSchema>> {
@@ -62,14 +62,14 @@ export class PipelineRepository implements IPipelineRepository {
 
   async getPipeline(args: {
     name: string;
-    version: string;
+    version: number;
   }): Promise<Result<PipelineSchema>> {
     throw new Error('Method not implemented.');
   }
 
   async checkIfPipelineExists(args: {
     name: string;
-    version: string;
+    version: number;
   }): Promise<Result<boolean>> {
     throw new Error('Method not implemented.');
   }

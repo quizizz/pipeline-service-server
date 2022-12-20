@@ -1,12 +1,14 @@
 export type ApiSchema = {
   schemaDefinitionVersion: string;
   name: string;
-  type: string;
-  owner: {
-    email: string;
+  version: number;
+  data: {
+    functionName: string;
+    type: string;
+    owner: {
+      service: string;
+    };
+    method: string;
   };
-  retry: {
-    count: number;
-    delay: number;
-  };
+  createdAt: number;
 };

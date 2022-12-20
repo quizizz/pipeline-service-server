@@ -1,6 +1,9 @@
 import Config from '@app/config';
+import { ApiController } from '@app/controllers/api.controller';
 import type BaseController from '@app/controllers/base.controller';
 import type { ControllerFactory } from '@app/controllers/factory.controller';
+import { PipelineController } from '@app/controllers/pipeline.controller';
+import { StepController } from '@app/controllers/step.controller';
 import beans from '@app/core/beans';
 import { ILogger } from '@app/core/logger';
 import { Router } from 'express';
@@ -32,6 +35,12 @@ export class HttpRoutes {
     @inject(beans.HEALTH_CONTROLLER) private healthController: BaseController,
     @inject(beans.NOT_FOUND_CONTROLLER)
     private notFoundController: BaseController,
+    @inject(beans.API_CONTROLLER)
+    private apiController: ApiController,
+    @inject(beans.PIPELINE_CONTROLLER)
+    private pipelineController: PipelineController,
+    @inject(beans.STEP_CONTROLLER)
+    private stepController: StepController,
     @inject(beans.CONFIG) private config: Config,
     @inject(beans.LOGGER) private logger: ILogger,
   ) {}
@@ -42,6 +51,20 @@ export class HttpRoutes {
    */
   v1() {
     const router = Router();
+
+    router.post(
+      '/apis',
+      this.factory.createHttpController(
+        this.apiController.createCreateAPIController(),
+      ),
+    );
+    router.get(
+      '/apis/:apiId/:apiVersion',
+      this.factory.createHttpController(
+        this.apiController.createGetAPIController(),
+      ),
+    );
+
     return router;
   }
 
